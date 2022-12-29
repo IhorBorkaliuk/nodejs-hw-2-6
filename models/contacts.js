@@ -65,7 +65,7 @@ const updateContact = async (contactId, body) => {
   try {
     const contacts = await listContacts();
     const idx = contacts.findIndex(contact => contact.id === contactId);
-    const updatedContact = { contactId, ...body } 
+    const updatedContact = { id: contactId, ...body } 
 
     if (idx === -1) {
       return null;

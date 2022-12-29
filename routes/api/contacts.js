@@ -1,5 +1,6 @@
 const express = require("express");
 const contacts = require("../../models/contacts");
+const schema = require("../../validate/validate")
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
@@ -43,11 +44,17 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    const newContact = await contacts.addContact(req.body);
-    if (!req.body) {
+    const { error } = schema.validate(req.body)
+    if (error) {
       res.status(404).json({ message: "missing required name field" });
+      return
     }
-    res.status(201).json(newContact);
+    const newContact = await contacts.addContact(req.body);
+    res.status(201).json({
+      status: "success",
+      code: 201,
+      data: { newContact },
+    });
   } catch (error) {
     res.status(404).json({ message: "Not found" });
   }
