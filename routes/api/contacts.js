@@ -43,15 +43,11 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    const result = await contacts.addContact(req.body);
+    const newContact = await contacts.addContact(req.body);
     if (!req.body) {
       res.status(404).json({ message: "missing required name field" });
     }
-    res.status(201).json({
-      status: "success",
-      code: 201,
-      data: { result },
-    });
+    res.status(201).json(newContact);
   } catch (error) {
     res.status(404).json({ message: "Not found" });
   }
