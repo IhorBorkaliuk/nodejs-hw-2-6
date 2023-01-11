@@ -1,5 +1,8 @@
-const { Contact } = require("../models/contact");
-const { validateSchema } = require("../models/contact");
+const {
+  Contact,
+  validateSchema,
+  validateStatusSchema,
+} = require("../models/contact");
 
 const listContacts = async (req, res, next) => {
   try {
@@ -24,7 +27,7 @@ const listContacts = async (req, res, next) => {
 const getContactById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await Contact.findOne(contactId);
+    const result = await Contact.findById(contactId);
     if (!result) {
       res.status(404).json({ message: "Not found" });
     }
@@ -86,7 +89,7 @@ const updateContact = async (req, res, next) => {
       return;
     }
     const { contactId } = req.params;
-    const result = await Contact.findByIdAndRemove(contactId, req.body, {
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
       new: true,
     });
     if (!result) {
@@ -107,29 +110,27 @@ const updateContact = async (req, res, next) => {
 
 const updateStatusContact = async (req, res, next) => {
   try {
-    const { error } = validateSchema.validate(req.body);
+    const { error } = validateStatusSchema.validate(req.body);
     if (error) {
-      error.status = 400;
-      throw error;
+      res.status(400).json({ message: "missing field favorite" });
     }
     const { contactId } = req.params;
-    const { favorite } = req.body;
 
-    const updateStatus = await Contact.findByIdAndUpdate(
+    const updatedStatus = await Contact.findByIdAndUpdate(
       contactId,
-      { favorite },
+      req.body,
       { new: true }
     );
 
-    if (!updateStatus) {
+    if (!updatedStatus) {
       res.status(400).json({ message: "missing field favorite" });
     }
     res.json({
       status: "success",
       code: 200,
-      message: `Status favorite = ${req.body.favorite}`,
+      message: `Status 'favorite' is ${req.body.favorite}`,
       data: {
-        result: updateStatus,
+        result: updatedStatus,
       },
     });
   } catch (error) {
