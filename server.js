@@ -1,11 +1,8 @@
-const app = require('./app')
+const app = require("./app");
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", true);
 
-const {DB_HOST} = process.env
-
-const PORT = 3000;
-// const DB_HOST="mongodb+srv://Sorc:mongodbtest@cluster0.wozd2wf.mongodb.net/db-contacts?retryWrites=true&w=majority"
+const { DB_HOST, PORT } = process.env;
 
 console.log(DB_HOST);
 
