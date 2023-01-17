@@ -1,5 +1,6 @@
-const register = require("./register")
-const login = require("./login")
-const currentUser = require("./currentUser")
+const register = require("./register");
+const login = require("./login");
+const current = require("./current");
+const logout = require("./logout");
 
-module.exports = { register, currentUser, login };
+module.exports = { register, current, login, logout };

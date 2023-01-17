@@ -1,14 +1,12 @@
-const currentUser = async (req, res, next) => {
+const current = async (req, res, next) => {
   try {
     const { email, subscription } = req.user;
     res.json({
       status: "success",
       code: 200,
-      data: {
-        user: {
-          email,
-          subscription,
-        },
+      user: {
+        email,
+        subscription,
       },
     });
   } catch (error) {
@@ -16,4 +14,4 @@ const currentUser = async (req, res, next) => {
   }
 };
 
-module.exports = currentUser;
+module.exports = current;
