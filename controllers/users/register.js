@@ -25,7 +25,7 @@ const register = async (req, res, next) => {
       status: "success",
       code: 201,
       user: {
-        email,
+        email: newUser.email,
         id: newUser._id,
       },
     });
