@@ -30,7 +30,6 @@ const register = async (req, res, next) => {
       code: 201,
       user: {
         email: newUser.email,
-        id: newUser._id,
         avatar,
       },
     });
