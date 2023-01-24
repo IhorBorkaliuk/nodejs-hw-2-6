@@ -7,6 +7,6 @@ router.post("/signup", ctrlUser.register);
 router.post("/login", ctrlUser.login);
 router.get("/logout", authorization, ctrlUser.logout);
 router.get("/current", authorization, ctrlUser.current);
-router.patch("/avatars", upload.single("avatar"), ctrlUser.uploadAvatar);
+router.patch("/avatars", authorization, upload.single("avatar"), ctrlUser.uploadAvatar);
 
 module.exports = router;
