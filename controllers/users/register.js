@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const gravatar = require("gravatar");
 const { User, validateRegisterSchema } = require("../../models/user");
 
 const register = async (req, res, next) => {
@@ -7,6 +8,7 @@ const register = async (req, res, next) => {
     const { error } = validateRegisterSchema.validate(req.body);
     if (error) {
       res.status(400).json({ message: "Invalid value of email or password" });
+      return;
     }
     const userCheck = await User.findOne({ email });
     if (userCheck) {
@@ -15,10 +17,12 @@ const register = async (req, res, next) => {
 
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
+    const avatar = gravatar.url(email);
 
     const newUser = await User.create({
       email,
       password: hashedPassword,
+      avatarURL: avatar,
     });
 
     res.status(201).json({
@@ -26,7 +30,7 @@ const register = async (req, res, next) => {
       code: 201,
       user: {
         email: newUser.email,
-        id: newUser._id,
+        avatar,
       },
     });
   } catch (error) {
