@@ -4,6 +4,7 @@ const sendEmail = require("../../services/sendEmail");
 const resendEmail = async (req, res, next) => {
   try {
     const { email } = req.body;
+    const { EMAIL_USER } = process.env;
     const user = await User.findOne({ email });
 
     if (!user) {
