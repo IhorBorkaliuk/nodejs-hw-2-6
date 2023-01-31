@@ -4,8 +4,10 @@ const { v4: uuidv4 } = require("uuid");
 const { User, validateRegisterSchema } = require("../../models/user");
 const sendEmail = require("../../services/sendEmail");
 
+
 const register = async (req, res, next) => {
   try {
+    const { EMAIL_USER, EMAIL_PASS } = process.env;
     const { email, password } = req.body;
     const { error } = validateRegisterSchema.validate(req.body);
     if (error) {
@@ -30,14 +32,28 @@ const register = async (req, res, next) => {
       verificationToken,
     });
 
-    const verifyEmail = {
+    const msg = {
+      from: EMAIL_USER,
       to: email,
-      subject: "Verify you email",
+      subject: "Please, verify your email",
       html: `<a target="_blank" 
-      href="http://localhost:3000/api/users/verify/${verificationToken}">Confirm your email></a>`,
+      href="http://localhost:3000/api/users/verify/${verificationToken}">Email verification</a>`,
     };
 
-    await sendEmail(verifyEmail);
+    // const config = {
+    //   host: "smtp.meta.ua",
+    //   port: 465,
+    //   secure: true,
+    //   auth: {
+    //     user: EMAIL_USER,
+    //     pass: EMAIL_PASS,
+    //   },
+    // };
+    // const transporter = nodemailer.createTransport(config);
+
+    // await transporter.sendMail(msg);
+
+    await sendEmail(msg);
 
     res.status(201).json({
       status: "success",

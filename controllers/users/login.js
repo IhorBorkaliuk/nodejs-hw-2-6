@@ -18,6 +18,30 @@ const login = async (req, res, next) => {
     if (!user || !userPassword) {
       res.status(401).json({ message: "Email or password is wrong" });
     }
+
+    if (!user.verify) {
+      res.json({ message: "Your Email is not verifyied!" });
+    }
+
+    // const msg = {
+    //   to: email,
+    //   subject: "Please, verify your email",
+    //   html: `<a target="_blank" 
+    //   href="http://localhost:3000/api/users/verify/${verificationToken}">Email verification</a>`,
+    // };
+
+    // const transport = nodemailer.createTransport({
+    //   host: "sandbox.smtp.mailtrap.io",
+    //   port: 2525,
+    //   auth: {
+    //     user: EMAIL_USER,
+    //     pass: EMAIL_PASS,
+    //   },
+    // });
+
+    // await transport.sendMail(msg);
+
+
     const payload = {
       id: user._id,
     };
