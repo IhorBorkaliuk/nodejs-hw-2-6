@@ -7,17 +7,21 @@ const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const { error } = validateLoginSchema.validate(req.body);
-    console.log(password);
     if (error) {
       res.status(400).json({ message: "Wrong email or password" });
     }
 
     const user = await User.findOne({ email });
     const userPassword = await bcrypt.compare(password, user.password);
-    console.log(user.password);
     if (!user || !userPassword) {
       res.status(401).json({ message: "Email or password is wrong" });
     }
+
+    if (!user.verify) {
+      res.json({ message: "Your Email is not verifyied!" });
+    }
+
+
     const payload = {
       id: user._id,
     };
